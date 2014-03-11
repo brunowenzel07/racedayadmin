@@ -1,0 +1,31 @@
+﻿@using System.Globalization
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>@ViewBag.Title</title>
+        @Styles.Render("~/Content/css")
+        @RenderSection("css", required: false)
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/jqueryval")
+        @RenderSection("scripts", required: false)
+        <script>
+            kendo.culture('@CultureInfo.CurrentCulture.ToString()');
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            @RenderSection("nav", required: false)
+            @{ Html.RenderPartial("_NavBar"); }
+            <div id="body" class="container body-content">
+                <section>
+                    @RenderBody()
+                </section>
+            </div>
+        </div>  
+    </body>
+</html>

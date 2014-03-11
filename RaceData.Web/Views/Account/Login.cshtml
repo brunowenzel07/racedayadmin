@@ -1,0 +1,37 @@
+﻿@using Microsoft.Ajax.Utilities
+@model RaceData.Web.Models.LoginModel
+
+@{
+    ViewBag.Title = "Log in";
+}
+@section css
+{
+    @Styles.Render("~/Content/css/login")
+}
+@section nav
+{
+    @{ Html.RenderPartial("_NavBar"); }
+}
+<div class="container">
+    @using (Html.BeginForm("Login", "Account", FormMethod.Post, new{@class="form-signin", @role="form"}))
+    {
+        <h2 class="form-signin-heading">Please sign in</h2>
+        @Html.TextBoxFor(m => m.UserName, new {@placeholder = "Email address", @required = "", @autofocus = "", @class = "form-control"})
+        @Html.PasswordFor(m => m.Password, new {@placeholder = "Password", @required = "", @class = "form-control"})
+        <label class="checkbox">
+            @Html.CheckBoxFor(m => m.RememberMe) Remember me
+        </label>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    }
+</div>
+<div style="width: 380px; margin: 0px auto;">
+    @{
+        ModelError firstOrDefault = ViewContext.ViewData.ModelState["LoginError"] != null ? ViewContext.ViewData.ModelState["LoginError"].Errors.FirstOrDefault() : null;
+        if (firstOrDefault != null)
+        {
+            <div class="alert alert-danger col-sm-1" style="margin-top: 10px; width: 380px">@firstOrDefault.ErrorMessage</div>
+        }
+    }
+</div>    
+
+

@@ -1,0 +1,13 @@
+﻿@using AutoMapper
+@using Kendo.Mvc.UI
+@using RaceData.Dal.DTO
+@using RaceData.Dal.POCO
+@using RaceData.Service
+
+@(Html.Kendo().ComboBox()
+    .Placeholder("Select Trainer...")
+    .Filter(FilterType.StartsWith)
+    .Name("Trainer")
+    .DataValueField("Id")
+    .DataTextField("Name")
+      .BindTo(SessionService.Trainer.Select(Mapper.Map<Trainer, DTOTrainer>).ToList()).Value(null))

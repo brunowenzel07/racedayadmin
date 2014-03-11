@@ -1,0 +1,54 @@
+﻿@using Kendo.Mvc.UI
+@using RaceData.Dal.DTO
+@using RaceData.Dal.POCO
+@using RaceData.Models.Models
+
+@{
+    Html.Kendo().Grid<JockeyModel>()
+        .Name("JockeyGrid")
+        .Editable(m => m.Mode(GridEditMode.InLine))
+        .ToolBar(t => t.Create())
+        .HtmlAttributes(new {@style = "width:100%"})
+        .Columns(c =>
+                 {
+                     c.Command(command => command.Edit()).Width(90);
+                     if (User.IsInRole("Superadmin"))
+                     {
+                         c.Command(command => command.Destroy()).Width(150);
+                     }
+                     c.Bound(col => col.Id).Hidden();
+                     c.Bound(col => col.Fullname).Title("<b>Full Name</b>").Sortable(true).Filterable(true).Width(150);
+                     c.Bound(col => col.Gender).Title("<b>Gender</b>").Sortable(true).Filterable(true).Width(100).EditorTemplateName("GenderEditor");
+                     c.Bound(col => col.isApprentice).Title("<b>Is Apprentice</b>").Sortable(true).Filterable(true).Width(150);
+                     c.Bound(col => col.CountryOfRegistration).Title("<b>Country Of Registration</b>").Sortable(true).Filterable(true).Width(170).ClientTemplate("#=data.CountryOfRegistration?(data.CountryOfRegistration.Name==null?'':data.CountryOfRegistration.Name):''#").EditorTemplateName("DTOCountryOfRegistrationEditor");
+                     c.Bound(col => col.CountryOfOrigin).Title("<b>Country Of Origin</b>").Sortable(true).Filterable(true).ClientTemplate("#=data.CountryOfOrigin?(data.CountryOfOrigin.Name==null?'':data.CountryOfOrigin.Name):''#").Width(200).EditorTemplateName("DTOCountryOfOrginEditor");                     
+                     c.Command(command => command.Edit()).Width(90);
+                     if (User.IsInRole("Superadmin"))
+                     {
+                         c.Command(command => command.Destroy()).Width(150);
+                     }
+                 })
+        .DataSource(ds => ds
+            .Ajax()
+            .Model(m =>
+                   {
+                       m.Id(mod => mod.Id);
+                       m.Field(mod => mod.Fullname).DefaultValue("");
+                       m.Field(mod => mod.CountryOfOrigin).DefaultValue(null);
+                       m.Field(mod => mod.CountryOfRegistration).DefaultValue(null);
+                       m.Field(mod => mod.Gender).DefaultValue("");
+                       m.Field(mod => mod.isApprentice).DefaultValue(false);
+                    
+                   })
+            .Read(r => r.Action("ReadJockey", "Jockey"))
+            .Update(u => u.Action("UpdateJockey", "Jockey"))
+            .Create(c => c.Action("CreateJockey", "Jockey"))
+            .Destroy(c => c.Action("DeleteJockey", "Jockey"))
+            .PageSize(10)
+        )
+        .AutoBind(true)
+        .Pageable()
+        .Sortable()
+        .Filterable()
+        .Render();
+}

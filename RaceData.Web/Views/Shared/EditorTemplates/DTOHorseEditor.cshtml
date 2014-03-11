@@ -1,0 +1,10 @@
+﻿@using Kendo.Mvc.UI
+@using RaceData.Service
+
+    @(Html.Kendo().ComboBox()
+          .Placeholder("Select Horse....")
+          .Filter(FilterType.StartsWith)
+          .Name("Horse")
+          .DataValueField("Id")
+          .DataTextField("Name")
+          .BindTo(SessionService.Horse).Value(null))

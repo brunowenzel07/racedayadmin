@@ -1,0 +1,5 @@
+@using System.Globalization
+@using Kendo.Mvc.UI
+@model DateTime?
+
+@(Html.Kendo().DateTimePickerFor(m => m).Culture(CultureInfo.CurrentCulture.ToString())).Format(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.Replace(".","'/'"))

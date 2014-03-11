@@ -1,0 +1,71 @@
+﻿@using Kendo.Mvc.UI
+@using RaceData.Dal.DTO
+@using RaceData.Dal.POCO
+@using RaceData.Models.Models
+
+@{
+    Html.Kendo().Grid<HorseModel>()
+        .Name("HorsesGrid")
+        .Editable(m => m.Mode(GridEditMode.InLine))
+        .ToolBar(t => t.Create())
+        .HtmlAttributes(new {@style = "width:100%"})
+        .Columns(c =>
+                 {
+                     c.Command(command => command.Edit()).Width(90);
+                     if (User.IsInRole("Superadmin"))
+                     {
+                         c.Command(command => command.Destroy()).Width(150);
+                     }
+                     c.Bound(col => col.Id).Hidden();
+                     c.Bound(col => col.Name).Title("<b>Name</b>").Sortable(true).Filterable(true).Width(150);
+                     c.Bound(col => col.CountryOfRegistration).Title("<b>Country Of Registration</b>").Sortable(true).Filterable(true).Width(170).ClientTemplate("#=data.CountryOfRegistration?(data.CountryOfRegistration.Name==null?'':data.CountryOfRegistration.Name):''#").EditorTemplateName("DTOCountryEditor");
+                     c.Bound(col => col.CountryOfOrigin).Title("<b>Country Of Origin</b>").Sortable(true).Filterable(true).ClientTemplate("#=data.CountryOfOrigin?(data.CountryOfOrigin.Name==null?'':data.CountryOfOrigin.Name):''#").Width(200).EditorTemplateName("DTOCountryOfOrginEditor");
+                     c.Bound(col => col.HK_ChineseName).Title("<b>Chinese Name</b>").Sortable(true).Filterable(true).Width(170);
+                     c.Bound(col => col.HK_BrandNumber).Title("<b>Brand Number</b>").Sortable(true).Filterable(true).Width(170);
+                     c.Bound(col => col.Sex).Title("<b>Sex</b>").Sortable(true).Filterable(true).Width(170).ClientTemplate("#=data.Sex?(data.Sex.Name==null?'':data.Sex.Name):''#").EditorTemplateName("DTOSexEditor");
+                     c.Bound(col => col.CoatColor).Title("<b>CoatColor</b>").Sortable(true).Filterable(true).Width(170).ClientTemplate("#=data.CoatColor?(data.CoatColor.Name==null?'':data.CoatColor.Name):''#").EditorTemplateName("DTOCoatColorEditor");
+                     c.Bound(col => col.SireName).Title("<b>Sire Name</b>").Sortable(true).Filterable(true).Width(170);
+                     c.Bound(col => col.DamName).Title("<b>Dam Name</b>").Sortable(true).Filterable(true).Width(170);
+                     c.Bound(col => col.IsActive).Title("<b>Is Active</b>").Sortable(true).Filterable(true).Width(170);
+                     c.Bound(col => col.Z_MaxHcpRating).Title("<b>Max Hcp Rating</b>").Sortable(true).Filterable(true).Width(170).EditorTemplateName("Short");
+                     c.Bound(col => col.Z_CurrentHcpRating).Title("<b>Current Hcp Rating</b>").Sortable(true).Filterable(true).Width(170).EditorTemplateName("Short");
+                     c.Bound(col => col.Z_StartSeasonHcpRating).Title("<b>Start Season Hcp Rating</b>").Sortable(true).Filterable(true).Width(170).EditorTemplateName("Short");
+                     c.Bound(col => col.DateOfBirth).Title("<b>Date Of Birth</b>").Sortable(true).Filterable(true).Format("{0:MM/dd/yyyy}").Width(140).EditorTemplateName("Date");
+                     c.Command(command => command.Edit()).Width(90);
+                     if (User.IsInRole("Superadmin"))
+                     {
+                         c.Command(command => command.Destroy()).Width(150);
+                     }
+                 })
+        .DataSource(ds => ds
+            .Ajax()
+            .Model(m =>
+                   {
+                       m.Id(mod => mod.Id);
+                       m.Field(mod => mod.Name).DefaultValue("");
+                       m.Field(mod => mod.CountryOfOrigin).DefaultValue(null);
+                       m.Field(mod => mod.HK_ChineseName).DefaultValue("");
+                       m.Field(mod => mod.HK_BrandNumber).DefaultValue("");
+                       m.Field(mod => mod.Sex).DefaultValue(null);
+                       m.Field(mod => mod.CoatColor).DefaultValue(null);
+                       m.Field(mod => mod.SireName).DefaultValue("");
+                       m.Field(mod => mod.DamName).DefaultValue("");
+                       m.Field(mod => mod.IsActive).DefaultValue(true);
+                       m.Field(mod => mod.Z_MaxHcpRating).DefaultValue(0);
+                       m.Field(mod => mod.Z_CurrentHcpRating).DefaultValue(0);
+                       m.Field(mod => mod.Z_StartSeasonHcpRating).DefaultValue(0);
+                       m.Field(mod => mod.DateOfBirth).DefaultValue(DateTime.Now);
+                       m.Field(mod => mod.CountryOfRegistration).DefaultValue(null);
+                   })
+            .Read(r => r.Action("ReadHorse", "Horses"))
+            .Update(u => u.Action("UpdateHorse", "Horses"))
+            .Create(c => c.Action("CreateHorse", "Horses"))
+            .Destroy(c => c.Action("DeleteHorse", "Horses"))
+            .PageSize(10)
+        )
+        .AutoBind(true)
+        .Pageable()
+        .Sortable()
+        .Filterable()
+        .Render();
+}

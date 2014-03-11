@@ -1,0 +1,31 @@
+﻿@using Kendo.Mvc.UI
+@using RaceData.Dal.DTO
+@using RaceData.Dal.POCO
+@model RaceData.Web.Models.MeetingsSearchModel
+<div class="col-lg-12">
+    @{ Html.Kendo().Grid<DtoMeeting>()
+           .Name("MeetingGrid")
+           .Columns(c =>
+                    {
+                        c.Bound(col => col.MeetingDate).Sortable(true).Title("<b>Date</b>").Format("{0:MM/dd/yyyy}");
+                        c.Bound(col => col.CountryCode).Sortable(true).Title("<b>Country code</b>");
+                        c.Bound(col => col.RacecourseName).Sortable(true).Title("<b>Rececourse Name</b>");
+                        c.Command(command => command.Custom("View Details").Click("viewDetails"));
+                    })
+           .DataSource(ds => ds
+               .Ajax()
+               .Model(model => model.Id(m => m.Id))
+               .Read(read => read.Action("GetMGridDataSource", "Meetings")).PageSize(10))
+           .Pageable()
+           .Sortable().AutoBind(true).Render();
+    }
+</div>
+<script type="text/javascript">
+    function viewDetails(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        //openwindow("meetingdetails", "@Url.Content("~/Meetings/MeetingDetails/")"+dataItem.id, 900, 500, "Meeting Details");
+        window.location.href = "@Url.Content("~/Meetings/MeetingDetails/")" + dataItem.id;
+
+    }
+</script>

@@ -1,0 +1,61 @@
+﻿@using System.Xml.Serialization
+@using Kendo.Mvc.UI
+@using RaceData.Dal.POCO
+@using RaceData.Models.Models
+@using RaceData.Service
+@model RaceData.Models.Models.MeetingsDetailsModel
+<div class="k-content">
+    @{
+        SessionService.CurrentMeetingId = Model.MeetingId;
+        SessionService.TotalRace = Model.NumberOfRaces;
+        MemoryStream encModel;
+        var serializer = new XmlSerializer(typeof(TabAllModel));
+        HttpCookie httpCookie = Request.Cookies[SessionService.RuleDisplay];
+        if (httpCookie != null)
+        {
+            encModel = new MemoryStream(Convert.FromBase64String(httpCookie.Value));
+            SessionService.RuleOfDisplaying = serializer.Deserialize(encModel) as TabAllModel;
+        }
+        else
+        {
+            var tabAllModel = new TabAllModel(true);
+            encModel = new MemoryStream();
+            serializer.Serialize(encModel, tabAllModel);
+            string base64String = Convert.ToBase64String(encModel.ToArray());
+            var cookie = new HttpCookie(SessionService.RuleDisplay)
+            {
+                Value = base64String,
+                Expires = DateTime.Now.AddYears(1)
+            };
+            Request.Cookies.Add(cookie);
+            SessionService.RuleOfDisplaying = tabAllModel;
+        }
+        Type type = SessionService.RuleOfDisplaying.GetType();
+       
+        @Html.Kendo().TabStrip().Name("RacesTabs").Events(e => e.Select("onSelect")).Items(tabs =>
+                                                                                           {
+                                                                                               for (int i = 1; i <= Model.NumberOfRaces; i++)
+                                                                                               {
+                                                                                                   var flag = (bool) type.GetProperty("Race" + i).GetValue(SessionService.RuleOfDisplaying);
+                                                                                                   if (flag)
+                                                                                                   {
+                                                                                                       var firstOrDefault = Model.Races.FirstOrDefault(m => m.RaceNumber == i);
+                                                                                                       tabs.Add().Text("Race " + i).LoadContentFrom(Url.Content("~/Race/RaceDetails/") + (firstOrDefault == null ? 0 : firstOrDefault.Id) + "/" + i);
+                                                                                                      
+                                                                                                   }
+                                                                                               }
+                                                                                               tabs.Add().Text("All").LoadContentFrom(Url.Content("~/Race/TabAll"));
+                                                                                           }).SelectedIndex(0)
+     
+    }
+    
+</div>
+<script>
+    function onSelect(e) {
+        //clear the current content of the tab before it's displayed to force the tabStrip to load it
+        $(e.contentElement).html("");
+        $('#details').remove();
+    }
+</script>
+
+

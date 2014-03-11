@@ -1,0 +1,51 @@
+﻿@using Kendo.Mvc.UI
+@using RaceData.Dal.POCO
+@model RaceData.Models.Models.MeetingsDetailsModel
+@{
+    ViewBag.Title = "Meeting details.";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container"> 
+    <div class="row">
+        <div class="col-md-4 col-md-push-8">
+            <h2>MeetingDetails</h2>
+        </div>
+        <div class="col-md-8 col-md-pull-4" style="padding-top: 15px">
+            <table style="border: none">
+                <tr>
+                    <td>
+                        @Model.CountryCode|
+                    </td>
+                    <td>
+                        @Model.RaceCourseCode|
+                    </td>
+                    <td>
+                        @Model.Date|
+                    </td>
+                    <td>
+                        @Model.WeatherName|
+                    </td>
+                    <td>
+                        @Model.GoingName
+                    </td>
+                    @if (Model.CountryCode.Contains("HK"))
+                    {
+                        <td>
+                            |@Model.DayNight;
+                        </td>
+                    }
+                    <td>
+                        |@Model.CourseVariantName
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        @{
+            Html.RenderPartial("_DetailsTab", Model);
+        }
+    </div>
+</div>
+
+   

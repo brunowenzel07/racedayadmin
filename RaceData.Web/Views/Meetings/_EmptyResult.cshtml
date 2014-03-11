@@ -1,0 +1,112 @@
+﻿@using System.Globalization
+@using System.Web.UI.WebControls
+@using Kendo.Mvc.UI
+@using RaceData.Dal.DataManagers
+@using RaceData.Dal.POCO
+@using RaceData.Service
+@using RaceData.Web.Controllers
+@using Autofac
+@model RaceData.Web.Models.MeetingsModel
+<div class="container">
+    @if (ViewBag.WndClose != null && ViewBag.WndClose)
+    {
+        <script type="text/javascript">
+                    closewindow("wndnewmeeting");
+                    window.location.href = "@Url.Content("~/Meetings/Index")";
+        </script>
+    }
+    @using (Ajax.BeginForm("NewMeeting", "Meetings", null, new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "wndnewmeeting" }, new { @class = "form-horizontal", role = "form" }))
+    {
+       
+        @Html.HiddenFor(m=>m.CountryId)
+        @Html.HiddenFor(m=>m.RacecourseId)
+        <div class="form-group">
+            <div class="col-md-1 control-label" style="width: 400px">
+                <h3>Create a New Meeting:</h3>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2 control-label">
+                <b>Country:</b>@Html.Encode(Model.CountryCode)&nbsp;&nbsp;<b>Racecourse:</b>@Html.Encode(Model.Racecourse)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2">
+                @{ Html.Kendo().ComboBoxFor(m=>m.Weather)
+                       .DataTextField("Name")
+                       .DataValueField("Id")
+                       .Placeholder("Weather")
+                       .Filter(FilterType.Contains)
+                       .DataSource(source => source.Read(read => read.Action("GetWeather", "Meetings")))
+                       .Render(); }
+            </div>
+            <div class="col-md-2">
+                @{ Html.Kendo().ComboBoxFor(m=>m.Going)
+                       .DataTextField("Name")
+                       .DataValueField("Id")
+                       .Placeholder("Going")
+                       .Filter(FilterType.Contains)
+                       .DataSource(source => source.Read(read => read.Action("GetGoing", "Meetings")))
+                       .Render(); }
+            </div>
+            <div class="col-md-2">
+                @if (SessionService.DbContainer.Resolve<CountrysDataManager>().GetById(Convert.ToInt32(SessionService.SearchModel.Country)).Code.Contains("HK"))
+                {
+                    <div class="radio">
+                        <div>
+                            <label>
+                                <input type="radio" name="MeetingType" id="night" value="night" checked>Night Meeting
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <input type="radio" name="MeetingType" id="day" value="day">Day Meeting
+                            </label>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2 control-label">
+                Number of Race
+            </div>
+            <div class="col-md-2">
+                @(Html.Kendo().NumericTextBoxFor(m=>m.RaceNumber)
+                      .Format("#")
+                      .Min(0)
+                      .Max(12)
+                      .Value(0)
+                      )
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2 control-label">
+                Meeting Date
+            </div>
+            <div class="col-md-2">
+                @(Html.Kendo().DatePickerFor(m=>m.MeetingDate)
+                  .Value(DateTime.Now).Format(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.Replace(".", "'/'"))    
+                      )
+            </div>
+        </div>
+         
+        <div class="form-group" style="width: 400px; height: 80px">
+            @if(!ViewContext.ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    @Html.ValidationSummary()
+                </div> 
+            }
+        </div>
+         
+        <div class="form-group" style="padding-top: 20px">
+            <div class="col-md-2">
+                <button class="btn btn-lg btn-primary btn-block" type="submit" style="width:200px" >Create New Meeting</button>       
+            </div>  
+            <div class="col-md-2">
+                <button class="btn btn-lg btn-default btn-block" type="button" style="width:100px" onclick="closewindow('wndnewmeeting')">Cancel</button>
+            </div>  
+        </div>
+    }
+</div>

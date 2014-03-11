@@ -1,0 +1,36 @@
+﻿@using RaceData.Dal.POCO
+@using RaceData.Service
+@model RaceData.Web.Models.MeetingsSearchModel
+@{
+    ViewBag.Title = "Meetengs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section scripts
+{
+   @Scripts.Render("~/bundles/jqueryvalajax")
+}
+<div class="col-lg-12">
+    <h2 style="width: 100px; padding-top: 10px; margin: 0px auto">Meeteings</h2>
+</div>
+
+@{ Html.RenderPartial("_search", Model);}
+@if ((Model != null && Model.SearchResult != null) && (Model.SearchResult.Any()))
+{
+    Html.RenderPartial("_Table", Model);
+}
+else if (((Model != null && Model.SearchResult != null) && !Model.SearchResult.Any()) )
+{
+    SessionService.SearchModel = Model;
+        
+    <script type="text/javascript">
+        openwindow("wndnewmeeting", "@Url.Content("~/Meetings/EmptyResult")", 650, 450, "Empty result!")
+    </script>
+}
+else if (Model != null && (Model.IsCreateNew??false) && ViewContext.ViewData.ModelState.IsValid)
+{
+     SessionService.SearchModel = Model;
+        
+    <script type="text/javascript">
+        openwindow("wndnewmeeting", "@Url.Content("~/Meetings/EmptyResult")", 650, 450, "Empty result!")
+    </script>
+} 

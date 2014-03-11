@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{329A4061-2E9D-4F09-8645-440DE40DA96D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RaceData.Dal</RootNamespace>
+    <AssemblyName>RaceData.Dal</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.3.1.1\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Net4">
+      <HintPath>..\packages\AutoMapper.3.1.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+    </Reference>
+    <Reference Include="Dapper">
+      <HintPath>..\packages\Dapper.1.13\lib\net45\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="DapperExtensions">
+      <HintPath>..\packages\DapperExtensions.1.4.3\lib\net40\DapperExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="GoldParser">
+      <HintPath>..\packages\SqlLinq.1.0.1\lib\net45\GoldParser.dll</HintPath>
+    </Reference>
+    <Reference Include="Kackman.RuntimeTypeLoader">
+      <HintPath>..\packages\SqlLinq.1.0.1\lib\net45\Kackman.RuntimeTypeLoader.dll</HintPath>
+    </Reference>
+    <Reference Include="LinqStatistics">
+      <HintPath>..\packages\LinqStatistics.1.0.2\lib\net40\LinqStatistics.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.2.1.0\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLinq">
+      <HintPath>..\packages\SQLinq.2.0\lib\net\SQLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLinq.Dapper">
+      <HintPath>..\packages\SQLinq.Dapper.1.2\lib\net\SQLinq.Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\BaseDataManager.cs" />
+    <Compile Include="Core\DBConnection.cs" />
+    <Compile Include="Core\Log.cs" />
+    <Compile Include="DataManagers\CoatColorDataManager.cs" />
+    <Compile Include="DataManagers\CountrysDataManager.cs" />
+    <Compile Include="DataManagers\CourseVariantDataManager.cs" />
+    <Compile Include="DataManagers\DistanceDataManager.cs" />
+    <Compile Include="DataManagers\GearDataManager.cs" />
+    <Compile Include="DataManagers\GoingDataManager.cs" />
+    <Compile Include="DataManagers\HorseDataManager.cs" />
+    <Compile Include="DataManagers\HorseODDDataManager.cs" />
+    <Compile Include="DataManagers\JockeyDataManager.cs" />
+    <Compile Include="DataManagers\MeetingDataManager.cs" />
+    <Compile Include="DataManagers\RacecourseDataManager.cs" />
+    <Compile Include="DataManagers\RaceDataManager.cs" />
+    <Compile Include="DataManagers\RaceTypeDataManager.cs" />
+    <Compile Include="DataManagers\RunnerDataManager.cs" />
+    <Compile Include="DataManagers\SexDataManager.cs" />
+    <Compile Include="DataManagers\TrainerDataManager.cs" />
+    <Compile Include="DataManagers\vwvRunnerDataManager.cs" />
+    <Compile Include="DataManagers\WeatherDataManager.cs" />
+    <Compile Include="DTO\DTOBase.cs" />
+    <Compile Include="DTO\DTOColor.cs" />
+    <Compile Include="DTO\DTOCountry.cs" />
+    <Compile Include="DTO\DTOCountryOfOrigin.cs" />
+    <Compile Include="DTO\DTOCountryOfRegistration.cs" />
+    <Compile Include="DTO\DTOHorse.cs" />
+    <Compile Include="DTO\DTOJockey.cs" />
+    <Compile Include="DTO\DTOMeeting.cs" />
+    <Compile Include="DTO\DTORaceCourse.cs" />
+    <Compile Include="DTO\DTORaceType.cs" />
+    <Compile Include="DTO\DTORunner.cs" />
+    <Compile Include="DTO\DTOGear.cs" />
+    <Compile Include="DTO\DTOSex.cs" />
+    <Compile Include="DTO\DTOTrainer.cs" />
+    <Compile Include="DTO\HorseGridDTO.cs" />
+    <Compile Include="POCO\CoatColor.cs" />
+    <Compile Include="POCO\Country.cs" />
+    <Compile Include="POCO\CourseVariant.cs" />
+    <Compile Include="POCO\Distance.cs" />
+    <Compile Include="POCO\Gear.cs" />
+    <Compile Include="POCO\Going.cs" />
+    <Compile Include="POCO\Horse.cs" />
+    <Compile Include="POCO\HorseODD.cs" />
+    <Compile Include="POCO\vwvTrainer.cs" />
+    <Compile Include="POCO\vwvJockey.cs" />
+    <Compile Include="POCO\Jockey.cs" />
+    <Compile Include="POCO\Meeting.cs" />
+    <Compile Include="POCO\Race.cs" />
+    <Compile Include="POCO\RaceType.cs" />
+    <Compile Include="POCO\Rececourse.cs" />
+    <Compile Include="POCO\Runner.cs" />
+    <Compile Include="POCO\Sex.cs" />
+    <Compile Include="POCO\Trainer.cs" />
+    <Compile Include="POCO\vwvHorse.cs" />
+    <Compile Include="POCO\vwvRunner.cs" />
+    <Compile Include="POCO\Weather.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

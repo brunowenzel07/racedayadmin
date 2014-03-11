@@ -1,0 +1,78 @@
+﻿@using System.Globalization
+@using Kendo.Mvc.UI
+@model RaceData.Web.Models.MeetingsSearchModel
+
+@using (Html.BeginForm("Index", "Meetings", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+     <script>
+            kendo.culture('@CultureInfo.CurrentCulture.ToString()');
+    </script>
+    @Html.HiddenFor(m=>m.IsCreateNew);
+    <div class="form-group">
+        <div class="col-md-1" style="width: 300px">
+            <h3 class="control-label">Search for meetings</h3>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            @{ Html.Kendo().ComboBoxFor(m=>m.Country)
+                   .Name("country")
+                   .DataTextField("Name")
+                   .DataValueField("Id")
+                   .Placeholder("Country")
+                   .Filter(FilterType.Contains)
+                   .DataSource(source => source.Read(read => read.Action("GetCountrys", "Meetings")))
+                   .HtmlAttributes(new { @required = "", @class = "form-control" })
+                   .Render();
+             }
+        </div>
+        <div class="col-md-2">
+            @{ Html.Kendo().ComboBoxFor(m=>m.Racecourse)
+                   .Name("racecourse")
+                   .DataTextField("Name")
+                   .DataValueField("Id")
+                   .Filter(FilterType.Contains)
+                   .Placeholder("Racecourse/City")
+                   .DataSource(source => source.Read(read => read.Action("GetRacecourse", "Meetings").Data("filterCity")).ServerFiltering(true))
+                   .HtmlAttributes(new { @required = "", @class = "form-control" })
+                   .Enable(false)
+                   .AutoBind(false)
+                   .CascadeFrom("country")
+                   .Render();
+             }
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m=>m.StartDate, new{@class="col-md-2 control-label"})
+        <div class="col-md-10">
+            @Html.Kendo().DatePicker().Name("StartDate").Value(Model != null ? Model.StartDate : DateTime.Parse("01/08/2012")).Format(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.Replace(".","'/'"))
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m=>m.EndDate, new{@class="col-md-2 control-label"})
+        <div class="col-md-10">
+            @Html.Kendo().DatePicker().Name("EndDate").Value(Model != null ? Model.EndDate : new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month))).Format(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.Replace(".", "'/'"))
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" class="k-button col-md-2" style="width: 150px" value="Get Meetings"/>&nbsp;&nbsp;
+        <div class="col-md-10">
+            <input type="submit"  class="k-button col-md-2" style="width: 150px" value="Create Meeting" onclick="$('#IsCreateNew').val(true);" />
+        </div>
+    </div>
+    if (!ViewContext.ViewData.ModelState.IsValid)
+    {
+        <div class="form-group alert alert-danger" style="width:400px">
+        @Html.ValidationSummary()
+    </div>    
+    }
+    <script type="text/javascript">
+        function filterCity() {
+            return {
+                racecourse: $("#country").val()
+            };
+        }        
+    </script>
+}
+
+    

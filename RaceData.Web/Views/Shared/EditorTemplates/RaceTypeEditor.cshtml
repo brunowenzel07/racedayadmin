@@ -1,0 +1,34 @@
+﻿@using Kendo.Mvc.UI
+@using RaceData.Service
+@model RaceData.Dal.DTO.DTORaceType
+
+@Html.AntiForgeryToken()
+@Html.ValidationSummary(true)
+
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.Name)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.Name)
+    @Html.ValidationMessageFor(model => model.Name)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.IsGroup)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.IsGroup)
+    @Html.ValidationMessageFor(model => model.IsGroup)
+</div>
+<div class="editor-label">
+    @Html.LabelFor(model => model.Country)
+</div>
+<div class="editor-field">
+    @(Html.Kendo().DropDownList()
+          .Name("Country")
+          .DataValueField("Id")
+          .DataTextField("Name")
+          .BindTo(SessionService.Countries))
+    @Html.ValidationMessageFor(model => model.Country)
+</div>

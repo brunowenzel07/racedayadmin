@@ -1,0 +1,25 @@
+﻿@model RaceData.Web.Models.LocalPasswordModel
+@{
+    ViewBag.Title = "Manage Account";
+}
+@section nav
+{
+    @{ Html.RenderPartial("_NavBar"); }
+}
+<div class="container">
+    <h1>@ViewBag.Title.</h1>
+    <p>@ViewBag.StatusMessage</p>
+    <p>You're logged in as <strong>@User.Identity.Name</strong>.</p>
+
+    @if (ViewBag.HasLocalPassword)
+    {
+        @Html.Partial("_ChangePasswordPartial")
+    }
+    else
+    {
+        @Html.Partial("_SetPasswordPartial")
+    }
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

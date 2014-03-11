@@ -1,0 +1,199 @@
+﻿@using Autofac
+@using AutoMapper
+@using Kendo.Mvc.UI
+@using RaceData.Dal.DataManagers
+@using RaceData.Dal.DTO
+@using RaceData.Dal.POCO
+@using RaceData.Models.Models
+@using RaceData.Service
+@model RaceData.Models.Models.RaceDetailsModel
+@{
+    ViewBag.Title = "RaceDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .k-numerictextbox{width: 70px}
+    body{overflow-x: hidden}
+</style>
+<div id="details">
+    @using (Ajax.BeginForm("Update", new AjaxOptions() {HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "details"}))
+    {
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.RaceNumber)
+        @Html.HiddenFor(m => m.MeetingId)
+
+        <div class="row">
+            <div class="col-md-2" style="text-align: center; padding-top: 10px">
+                @Html.LabelFor(m => m.RaceName, new {@class = "control-label"})
+            </div>
+            <div class="col-md-2">
+                @Html.TextBoxFor(m => m.RaceName, new { @class = "form-control" })
+            </div>
+        </div>
+        if (SessionService.DbContainer.Resolve<CountrysDataManager>().GetById(Convert.ToInt32(SessionService.SearchModel.Country)).Code.Contains("HK"))
+        {
+            <div class="row">
+                <div class="col-md-2" style="text-align: center; padding-top: 10px">
+                    @Html.LabelFor(m => m.HK_RaceIndex, new {@class = "control-label"})
+                </div>
+                <div class="col-md-2">
+                    @Html.Kendo().NumericTextBoxFor(m => m.HK_RaceIndex).Decimals(0).Format("0").HtmlAttributes(new {@class = "form-control"});
+                </div>
+            </div>
+        }
+        else
+        {
+            Html.HiddenFor(m => m.HK_RaceIndex);
+        }
+        <div class="row">
+            <div class="col-md-2" style="text-align: center; padding-top: 10px">
+                @Html.LabelFor(m => m.IsStarted, new {@class = "control-label"})
+            </div>
+            <div class="col-md-2">
+                @Html.CheckBoxFor(m => m.IsStarted, new Dictionary<string, object>() { { "class", "form-control switch" }, { "data-on-text", "YES" }, { "data-off-text", "NO" } })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2" style="text-align: center; padding-top: 10px">
+                @Html.LabelFor(m => m.IsDone, new {@class = "control-label"})
+            </div>
+            <div class="col-md-2">
+                @Html.CheckBoxFor(m => m.IsDone, new Dictionary<string, object>() { { "class", "form-control switch" }, { "data-on-text", "YES" }, { "data-off-text", "NO" } })
+            </div>
+        </div>
+        <div class="row" style="padding-top: 15px">
+            <div class="col-md-2" style="text-align: center; padding-top: 10px">
+                @Html.LabelFor(m => m.RaceType, new {@class = "control-label"})
+            </div>
+            <div class="col-md-2">
+                @{ Html.Kendo().ComboBoxFor(m => m.RaceType)
+                       .DataTextField("Name")
+                       .DataValueField("Id")
+                       .Placeholder("Race Type Name")
+                       .Filter(FilterType.Contains)
+                       .DataSource(source => source.Read(read => read.Action("GetRaceType", "Race")))
+                       .Value(Model.RaceType == 0 ? "" : Model.RaceType.ToString())
+                       .Render(); }
+            </div>
+            @if (User.IsInRole("Superadmin"))
+                {          
+                 <div class="col-md-2">
+                    <input type="button" value="Create Race Type" onclick="openwindow('racetypewnd', '@Url.Content("~/Race/RaceType")', 600, 400, 'Race Type', rebind )"  class="k-button"/>
+                </div>
+           }
+        </div>
+        <div class="row">
+            <div class="col-md-2" style="text-align: center; padding-top: 10px">
+                @Html.LabelFor(m => m.Distance, new {@class = "control-label"})
+            </div>
+            <div class="col-md-2">
+                @{ Html.Kendo().ComboBoxFor(m => m.Distance)
+                       .DataTextField("Name")
+                       .DataValueField("Id")
+                       .Placeholder("Distance")
+                       .Filter(FilterType.Contains)
+                       .DataSource(source => source.Read(read => read.Action("GetDistance", "Race")))
+                       .Value(Model.Distance == 0 ? "" : Model.Distance.ToString())
+                       .Render(); }
+            </div>
+            @if (SessionService.DbContainer.Resolve<CountrysDataManager>().GetById(Convert.ToInt32(SessionService.SearchModel.Country)).Code.Contains("HK"))
+            {
+                <div class="col-md-2">
+                    <div class="radio">
+                        <div>
+                            <label>
+                                <input type="radio" name="Weather" id="turf" value="turf" checked>turf
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <input type="radio" name="Weather" id="all-weather" value="all-weather">all-weather
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                @Html.HiddenFor(m=>m.Weather)
+            }
+        </div>
+        <div class="row">
+            <div class="col-md-2" style="text-align: center; padding-top: 10px">
+                @Html.LabelFor(m => m.RaceWinningTime, new {@class = "control-label"})
+            </div>
+            <div class="col-md-2">
+                @Html.TextBoxFor(m => m.RaceWinningTime, new {@class = "k-textbox"})
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2" style="text-align: center; padding-top: 10px">
+                @Html.LabelFor(m => m.RaceJumpTimeHour, new {@class = "control-label"})
+            </div>
+            <div class="col-md-2">
+                <table>
+                    <tr>
+                        <td>
+                            @Html.Kendo().NumericTextBoxFor(m => m.RaceJumpTimeHour).Min((int?)0).Max(24).Decimals(0).Format("0")
+                        </td>
+                        <td>
+                            @Html.Kendo().NumericTextBoxFor(m => m.RaceJumpTimeMin).Min((int?)0).Max(60).Decimals(0).Format("0")      
+                        </td>
+                    </tr>
+                </table>  
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2" style="text-align: center; padding-top: 10px">
+                @Html.LabelFor(m => m.NumberOfRunners, new {@class = "control-label"})
+            </div>
+            <div class="col-md-2">
+                @(Html.Kendo().NumericTextBoxFor(m => m.NumberOfRunners)
+                      .Format("#")
+                      .Min(1)
+                      .Max(30)
+                      .Value(Model.NumberOfRunners == 0 ? 2 : Model.NumberOfRunners)
+                      )
+            </div>
+            <div class="col-md-2">
+                <input type="submit" value='@(Model.Id == 0 ? "Create" : "Update")' class="k-button" />
+            </div>
+        </div>
+    }
+    <div class="row">
+        <div class="col-md-11">
+            <hr />
+        </div>
+    </div>
+@if (SessionService.CurrentRaceId != null && SessionService.CurrentRaceId != 0)
+{
+    <div class="row">
+        <div class="col-md-11" style="width: 90%">
+            @{
+                Html.RenderPartial("_DetailsTable");
+            }
+        </div>
+    </div>
+       @* <div class="row" style="padding-top: 10px">
+            <div class="col-md-11">
+                @{
+                    Html.RenderPartial("_horseODO");
+                    
+                }
+            </div>
+        </div>*@
+ }
+</div>
+<script>
+    var globalData;
+    $(document).ready(function() {
+        $('#IsDone').prop('data-on-text','YES');
+        $('#IsDone').prop('data-off-text','NO');
+        $('.switch').bootstrapSwitch();
+    }); 
+    
+    function rebind() {
+        $('#RaceType').data('kendoComboBox').dataSource.read();
+        this.destroy();
+    }
+</script>

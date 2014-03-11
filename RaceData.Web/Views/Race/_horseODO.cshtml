@@ -1,0 +1,41 @@
+﻿@using Autofac
+@using Kendo.Mvc.UI
+@using RaceData.Dal.DataManagers
+@using RaceData.Models.Models
+@using RaceData.Service
+
+@{
+    Html.Kendo().Grid<HorseOddModel>()
+        .HtmlAttributes(new { style = "width:500px; height:300px" })
+        .ToolBar(t => t.Create())
+        .Name("HorseOdoGrid")
+        .Editable(e => e.Mode(GridEditMode.PopUp).TemplateName("HorseOdoEdit"))
+        .Sortable()
+        .Filterable()
+        .Pageable()
+        .Columns(c =>
+                 {
+                     c.Bound(col => col.HorseNumber).Sortable(true).Filterable(true).Title("<b>Horse number</b>");
+                     c.Bound(col => col.HorseName).Sortable(true).Filterable(true).Title("<b>Horse Name</b>"); ;
+                     c.Bound(col => col.WinOdds).Sortable(true).Filterable(true).Title("<b>Win Odds</b>"); ;
+                     c.Command(com => com.Edit());
+                 })
+        .DataSource(ds => ds
+            .Ajax()
+            .PageSize(10)
+            .Model(
+                model =>
+                {
+                    model.Id(i => i.Id);
+                    model.Field(p => p.HorseId).DefaultValue(SessionService.DbContainer.Resolve<HorseDataManager>().GetAll().FirstOrDefault().Id);
+                    model.Field(p => p.WinOdds).DefaultValue((decimal?)0.0);
+                    model.Field(p => p.HorseNumber).DefaultValue((int?)1);
+                }
+       )
+        .Read(read => read.Action("ReadH", "Race"))
+        .Create(create => create.Action("CreateH", "Race"))
+        .Update(create => create.Action("UpdateH", "Race"))
+    ).Render(); }
+
+
+

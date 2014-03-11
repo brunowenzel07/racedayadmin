@@ -1,0 +1,13 @@
+﻿@using AutoMapper
+@using Kendo.Mvc.UI
+@using RaceData.Dal.DTO
+@using RaceData.Dal.POCO
+@using RaceData.Service
+
+    @(Html.Kendo().ComboBox()
+    .Placeholder("Select Jockey...")
+    .Filter(FilterType.StartsWith)
+    .Name("Jockey")
+    .DataValueField("Id")
+    .DataTextField("Name")
+      .BindTo(SessionService.Jokeys.Select(Mapper.Map<Jockey, DTOJockey>)).Value(null))

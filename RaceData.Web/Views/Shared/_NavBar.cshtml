@@ -1,0 +1,54 @@
+﻿<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+            @if (string.IsNullOrEmpty(User.Identity.Name))
+            {
+                <li @Html.ActiveMenu("Register")>
+                    @Html.ActionLink("Register", "Register", "Account")
+                </li>
+                <li style="margin-right: 10px" @Html.ActiveMenu("Login")>
+                    @Html.ActionLink("Login", "Login", "Account")
+                </li>
+
+            }
+            else
+            {
+                <li >
+                    @Html.ActionLink("Logoff", "LogOff", "Account")
+                </li>
+                <li style="margin-right: 10px" @Html.ActiveMenu("Manage")>
+                    @Html.ActionLink("Manage", "Manage", "Account")
+                </li>
+            }
+        </ul>
+        <ul class="nav navbar-nav navbar-left">
+            @if (!string.IsNullOrEmpty(User.Identity.Name))
+            {
+                <li style="margin-right: 10px" @Html.ActiveMenu("Meetings")>
+                    @Html.ActionLink("Meeting", "Index", "Meetings")
+                </li>
+                <li style="margin-right: 10px" @Html.ActiveMenu("Horses")>
+                    @Html.ActionLink("Horses", "Index", "Horses")
+                </li>
+                <li style="margin-right: 10px" @Html.ActiveMenu("Trainer")>
+                    @Html.ActionLink("Trainer", "Index", "Trainer")
+                </li>
+                <li style="margin-right: 10px" @Html.ActiveMenu("Jockey")>
+                    @Html.ActionLink("Jockey", "Index", "Jockey")
+                </li>
+            }
+            
+        </ul>
+    </div><!-- /.navbar-collapse -->
+</nav>

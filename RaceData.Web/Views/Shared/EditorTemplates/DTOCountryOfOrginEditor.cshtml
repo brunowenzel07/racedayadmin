@@ -1,0 +1,11 @@
+﻿@using Kendo.Mvc.UI
+@using RaceData.Service
+
+@(Html.Kendo().ComboBox()
+    .Name("CountryOfOrigin")
+    .Placeholder("Select country...")
+    .Filter(FilterType.StartsWith)
+    .DataValueField("Id")
+    .DataTextField("Name")
+    .BindTo(SessionService.Countries)
+)

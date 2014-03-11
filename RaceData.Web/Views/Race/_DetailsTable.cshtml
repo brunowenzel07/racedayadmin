@@ -1,0 +1,112 @@
+﻿@using Autofac
+@using Kendo.Mvc.Resources
+@using Kendo.Mvc.UI
+@using RaceData.Dal.DataManagers
+@using RaceData.Dal.DTO
+@using RaceData.Dal.POCO
+@using RaceData.Service
+<style>
+    .k-grid {
+        overflow-x: scroll;
+        overflow-y: hidden;
+    }
+    .k-delete {
+        width: 150px;
+        display: inline;
+    }
+    
+</style>
+
+@{
+        Html.Kendo().Grid<DTORunner>()
+            .Name("RunnersGrid")
+            .Editable(m=>m.Mode(GridEditMode.InLine))
+            .Columns(c =>
+                     {
+                         if (User.IsInRole("Superadmin"))
+                         {
+                             c.Command(com => com.Destroy());
+                         }
+                         c.Command(com => com.Edit());
+                if (SessionService.DbContainer.Resolve<CountrysDataManager>().GetById(Convert.ToInt32(SessionService.SearchModel.Country)).Code.Contains("AUS"))
+                {
+                    c.Bound(col => col.AUS_SPW).Sortable(true).Filterable(true).Title("<b>SPW</b>").Width(100).EditorTemplateName("Decimal");
+                    c.Bound(col => col.AUS_BM).Sortable(true).Filterable(true).Title("<b>BM</b>").Width(100).EditorTemplateName("Double");
+                    c.Bound(col => col.AUS_HcpRatingAtJump).Sortable(true).Filterable(true).Title("<b>Rating At Jump</b>").Width(150).EditorTemplateName("Short");
+                    c.Bound(col => col.AUS_HcpWt).Sortable(true).Filterable(true).Title("<b>HcpWt</b>").Width(100).EditorTemplateName("Double");
+                    c.Bound(col => col.AUS_RP200).Sortable(true).Filterable(true).Title("<b>RP200</b>").Width(100).EditorTemplateName("Short");
+                    c.Bound(col => col.AUS_SPP).Sortable(true).Filterable(true).Title("<b>SPP</b>").Width(100).EditorTemplateName("Decimal");
+                }
+                if (SessionService.DbContainer.Resolve<CountrysDataManager>().GetById(Convert.ToInt32(SessionService.SearchModel.Country)).Code.Contains("HK"))
+                {
+                    c.Bound(col => col.HK_ActualWtLbs).Sortable(true).Filterable(true).Title("<b>Actual Wt Lbs</b>").Width(150).EditorTemplateName("Double");
+                    c.Bound(col => col.HK_DeclaredHorseWtLbs).Sortable(true).Filterable(true).Title("<b>Declared Horse Wt Lbs</b>").Width(190).EditorTemplateName("Double");
+                    c.Bound(col => col.HK_FinishTime).Sortable(true).Filterable(true).Title("<b>FinishTime</b>").Width(110).EditorTemplateName("Double");
+                    c.Bound(col => col.HK_LBW).Sortable(true).Filterable(true).Title("<b>LBW</b>").Width(100);
+                    c.Bound(col => col.HK_Rating).Sortable(true).Filterable(true).Title("<b>Rating</b>").Width(100).EditorTemplateName("Short");
+                    c.Bound(col => col.HK_WinOdds).Sortable(true).Filterable(true).Title("<b>WinOdds</b>").Width(90).EditorTemplateName("Double");
+                }
+                c.Bound(col => col.Gear).Sortable(true).Filterable(true).Title("<b>Gear</b>").ClientTemplate("<p style='width:150px'>#=Gear?(Gear.Name==null?'':Gear.Name):''#</p>").EditorTemplateName("DTOGearEditor").Width(300);
+                c.Bound(col => col.Horse).Sortable(true).Filterable(true).Title("<b>Horse</b>").ClientTemplate("<p style='width:150px'>#=Horse?(Horse.Name==null?'':Horse.Name):''#</p>").EditorTemplateName("DTOHorseEditor").Width(300);
+                c.Bound(col => col.Jockey).Sortable(true).Filterable(true).Title("<b>Jockey</b>").ClientTemplate("<p style='width:150px'>#=Jockey?(Jockey.Name==null?'':Jockey.Name):''#</p>").EditorTemplateName("DTOJockeyEditor").Width(300);
+                c.Bound(col => col.Trainer).Sortable(true).Filterable(true).Title("<b>Trainer</b>").ClientTemplate("<p style='width:150px'>#=Trainer?(Trainer.Name==null?'':Trainer.Name):''#</p>").EditorTemplateName("DTOTrainedEditor").Width(300);
+                c.Bound(col => col.HorseNumber).Sortable(true).Filterable(true).Title("<b>Horse number</b>").Width(150).EditorTemplateName("Short");
+                c.Bound(col => col.Barrier).Sortable(true).Filterable(true).Title("<b>Horse number</b>").Width(150).EditorTemplateName("Short");
+                c.Bound(col => col.CarriedWt).Sortable(true).Filterable(true).Title("<b>CarriedWt</b>").Width(120).EditorTemplateName("Double");
+                c.Bound(col => col.Place).Sortable(true).Filterable(true).Title("<b>Place</b>").Width(90);
+                c.Bound(col => col.RP1200).Sortable(true).Filterable(true).Title("<b>RP1200</b>").Width(90).EditorTemplateName("Short");
+                c.Bound(col => col.RP1600).Sortable(true).Filterable(true).Title("<b>RP1600</b>").Width(90).EditorTemplateName("Short");
+                c.Bound(col => col.RP2000).Sortable(true).Filterable(true).Title("<b>RP2000</b>").Width(80).EditorTemplateName("Short");
+                c.Bound(col => col.RP400).Sortable(true).Filterable(true).Title("<b>RP400</b>").Width(90).EditorTemplateName("Short");
+                c.Bound(col => col.RP800).Sortable(true).Filterable(true).Title("<b>RP800</b>").Width(70).EditorTemplateName("Short");
+                c.Bound(col => col.isScratched).Sortable(true).Filterable(true).Title("<b>Is Scratched</b>").Width(170);
+
+                if (User.IsInRole("Superadmin"))
+                {
+                    c.Command(com => com.Destroy());
+                }
+                c.Command(com => com.Edit());
+            })
+            .DataSource(ds => ds
+                .Ajax()
+                .Model(model =>
+                           {
+                               model.Id(m => m.Id);
+                               model.Field(f => f.Gear).DefaultValue(null);
+                               model.Field(f => f.Horse).DefaultValue(null);
+                               model.Field(f => f.Trainer).DefaultValue(null);
+                               model.Field(f => f.Jockey).DefaultValue(null);
+                               model.Field(f => f.AUS_SPW).DefaultValue(null);
+                               model.Field(f => f.AUS_BM).DefaultValue(null);
+                               model.Field(f => f.AUS_HcpRatingAtJump).DefaultValue(null);
+                               model.Field(f => f.AUS_HcpWt).DefaultValue(null);
+                               model.Field(f => f.AUS_RP200).DefaultValue(null);
+                               model.Field(f => f.AUS_SPP).DefaultValue(null);
+                               
+                               model.Field(f => f.HK_ActualWtLbs).DefaultValue(null);
+                               model.Field(f => f.HK_DeclaredHorseWtLbs).DefaultValue(null);
+                               model.Field(f => f.HK_FinishTime).DefaultValue(null);
+                               model.Field(f => f.HK_LBW).DefaultValue("");
+                               model.Field(f => f.HK_Rating).DefaultValue(null);
+                               model.Field(f => f.HK_WinOdds).DefaultValue(null);
+                               
+                               model.Field(f => f.HorseNumber).DefaultValue(null);
+                               model.Field(f => f.Barrier).DefaultValue(null);
+                               model.Field(f => f.CarriedWt).DefaultValue(null);
+                               model.Field(f => f.Place).DefaultValue("");
+                               model.Field(f => f.RP1200).DefaultValue(null);
+                               model.Field(f => f.RP1600).DefaultValue(null);
+                               model.Field(f => f.RP2000).DefaultValue(null);
+                               model.Field(f => f.RP400).DefaultValue(null);
+                               model.Field(f => f.RP800).DefaultValue(null);
+                               model.Field(f => f.isScratched).DefaultValue(false);
+                           }
+                       )
+                .Read(read => read.Action("GetRunners", "Runner"))
+                .Update(create=> create.Action("UpdateRunner", "Runner"))
+                .Destroy(create=> create.Action("DeleteRunner", "Runner"))
+                .PageSize(10))
+                
+            .Pageable().Filterable()
+            .Sortable().AutoBind(true).HtmlAttributes(new{@styles="width:2000px"}).Render();
+}

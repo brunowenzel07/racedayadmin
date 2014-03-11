@@ -1,0 +1,54 @@
+﻿@using Kendo.Mvc.UI
+@using RaceData.Models.Models
+@{
+    ViewBag.Title = "Trainer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryvalajax")
+}
+<div class="col-lg-12">
+    <h2 style="width: 100px; padding-top: 10px; margin: 0px auto">Trainer</h2>
+</div>
+
+
+@{
+    Html.Kendo().Grid<TrainerModel>()
+        .Name("TrainerGrid")
+        .Editable(m => m.Mode(GridEditMode.InLine))
+        .ToolBar(t => t.Create())
+        .HtmlAttributes(new { @style = "width:100%" })
+        .Columns(c =>
+                 {
+                     
+                     c.Bound(col => col.Id).Hidden();
+                     c.Bound(col => col.FullName).Title("<b>Full Name</b>").Width(200);
+                     c.Bound(col => col.HomeTrack).Title("<b>Home Track</b>").Sortable(true).Filterable(true).Width(150).ClientTemplate("#=data.HomeTrack?(data.HomeTrack.Name==null?'':data.HomeTrack.Name):''#").EditorTemplateName("DTOHomeTrackEditor");
+                     c.Command(command => command.Edit()).Width(90);
+                     if (User.IsInRole("Superadmin"))
+                     {
+                         c.Command(command => command.Destroy()).Width(100);
+                     }
+                     
+                 })
+        .DataSource(ds => ds
+            .Ajax()
+            .Model(m =>
+                   {
+                       m.Id(mod => mod.Id);
+                       m.Field(mod => mod.FullName).DefaultValue("");
+                       m.Field(mod => mod.HomeTrack).DefaultValue(null);
+                   })
+            .Read(r => r.Action("ReadTrainer", "Trainer"))
+            .Update(u => u.Action("UpdateTrainer", "Trainer"))
+            .Create(c => c.Action("CreateTrainer", "Trainer"))
+            .Destroy(c => c.Action("DeleteTrainer", "Trainer"))
+            .PageSize(10)
+        )
+        .AutoBind(true)
+        .Pageable()
+        .Sortable()
+        .Filterable()
+        .Render();
+}

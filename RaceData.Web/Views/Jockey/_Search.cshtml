@@ -1,0 +1,35 @@
+﻿@using Kendo.Mvc.UI
+@model RaceData.Models.Models.JockeySearchModel
+
+@using (Html.BeginForm("Index", "Jockey", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    <div class="form-group">
+        <div class="col-md-1" style="width: 300px">
+            <h3 class="control-label">Search for Horses</h3>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            @{ Html.Kendo().ComboBoxFor(m => m.CountryId)
+                   .DataTextField("Name")
+                   .DataValueField("Id")
+                   .Placeholder("Country")
+                   .Filter(FilterType.Contains)
+                   .DataSource(source => source.Read(read => read.Action("GetCountrys", "Meetings")))
+                   .HtmlAttributes(new { @required = ""})
+                   .Render();
+            }
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            <input type="submit" class="k-button col-md-2" style="width: 150px;" value="Get Jockey" />
+        </div>
+    </div>
+    if (!ViewContext.ViewData.ModelState.IsValid)
+    {
+        <div class="form-group alert alert-danger" style="width:400px">
+            @Html.ValidationSummary()
+        </div>
+    }
+}

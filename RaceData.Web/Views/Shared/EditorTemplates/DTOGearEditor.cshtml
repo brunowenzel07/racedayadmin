@@ -1,0 +1,11 @@
+﻿@using Kendo.Mvc.UI
+@using RaceData.Service
+
+
+@(Html.Kendo().ComboBox()
+    .Placeholder("Select Gear...")
+    .Filter(FilterType.StartsWith)
+    .Name("Gear")
+    .DataValueField("Id")
+    .DataTextField("Name")
+    .BindTo(SessionService.Gear).Value(null))

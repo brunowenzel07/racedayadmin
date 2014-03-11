@@ -1,0 +1,155 @@
+﻿@using RaceData.Service
+@model RaceData.Models.Models.TabAllModel
+<script>
+    $('.switch').bootstrapSwitch();
+    $('#SubmitAllTab').click(function() {
+        var result = false;
+        $('.switch').each(function() {
+            if (this.checked)
+                result = true;
+        });
+
+        if (!result) {
+            $('#error').css('display', 'block');
+        } else {
+            $('#error').css('display', 'none');
+        }
+        return result;
+    });
+</script>
+@using (Ajax.BeginForm("SaveSelection", "Race", null, new AjaxOptions() {InsertionMode = InsertionMode.Replace, UpdateTargetId = "AllTabContainer"}))
+{
+    <div id="AllTabContainer">
+        @if (SessionService.TotalRace >= 1)
+        {
+            <div class="row" style="padding-top: 20px">
+                <div class="col-md-2 editor-label">
+                    @Html.LabelFor(model => model.Race1)
+                </div>
+                <div class="col-md-2 editor-field">
+                    @Html.CheckBoxFor(m => m.Race1, new {@class = "switch switch-mini"})
+                </div>
+            </div>
+        }
+        @if (SessionService.TotalRace >= 2)
+        {
+            <div class="row">
+                <div class="col-md-2 editor-label">
+                    @Html.LabelFor(model => model.Race2)
+                </div>
+                <div class="col-md-2 editor-field">
+                    @Html.CheckBoxFor(m => m.Race2, new {@class = "switch switch-mini"})
+                </div>
+            </div>
+        }
+        @if (SessionService.TotalRace >= 3)
+        {
+            <div class="row">
+                <div class="col-md-2 editor-label">
+                    @Html.LabelFor(model => model.Race3)
+                </div>
+                <div class="col-md-2 editor-field">
+                    @Html.CheckBoxFor(m => m.Race3, new {@class = "switch switch-mini"})
+                </div>
+            </div>
+        }
+        @if (SessionService.TotalRace >= 4)
+        {
+            <div class="row">
+                <div class="col-md-2 editor-label">
+                    @Html.LabelFor(model => model.Race4)
+                </div>
+                <div class="col-md-2 editor-field">
+                    @Html.CheckBoxFor(m => m.Race4, new {@class = "switch switch-mini"})
+                </div>
+            </div>
+        }
+        @if (SessionService.TotalRace >= 5)
+        {
+            <div class="row">
+                <div class="col-md-2 editor-label">
+                    @Html.LabelFor(model => model.Race5)
+                </div>
+                <div class="col-md-2 editor-field">
+                    @Html.CheckBoxFor(m => m.Race5, new {@class = "switch switch-mini"})
+                </div>
+            </div>
+        }
+        @if (SessionService.TotalRace >= 7)
+        {
+            <div class="row">
+                <div class="col-md-2 editor-label">
+                    @Html.LabelFor(model => model.Race6)
+                </div>
+                <div class="col-md-2 editor-field">
+                    @Html.CheckBoxFor(m => m.Race6, new {@class = "switch switch-mini"})
+                </div>
+            </div>
+        }
+        @if (SessionService.TotalRace >= 8)
+        {
+            <div class="row">
+                <div class="col-md-2 editor-label">
+                    @Html.LabelFor(model => model.Race7)
+                </div>
+                <div class="col-md-2 editor-field">
+                    @Html.CheckBoxFor(m => m.Race8, new {@class = "switch switch-mini"})
+                </div>
+            </div>
+        }
+        @if (SessionService.TotalRace >= 9)
+        {
+            <div class="row">
+                <div class="col-md-2 editor-label">
+                    @Html.LabelFor(model => model.Race9)
+                </div>
+                <div class="col-md-2 editor-field">
+                    @Html.CheckBoxFor(m => m.Race9, new {@class = "switch switch-mini"})
+                </div>
+            </div>
+        }
+        @if (SessionService.TotalRace >= 10)
+        {
+            <div class="row">
+                <div class="col-md-2 editor-label">
+                    @Html.LabelFor(model => model.Race10)
+                </div>
+                <div class="col-md-2 editor-field">
+                    @Html.CheckBoxFor(m => m.Race10, new {@class = "switch switch-mini"})
+                </div>
+            </div>
+        }
+        @if (SessionService.TotalRace >= 11)
+        {
+            <div class="row">
+                <div class="col-md-2 editor-label">
+                    @Html.LabelFor(model => model.Race11)
+                </div>
+                <div class="col-md-2 editor-field">
+                    @Html.CheckBoxFor(m => m.Race11, new {@class = "switch switch-mini"})
+                </div>
+            </div>
+        }
+        @if (SessionService.TotalRace >= 12)
+        {
+            <div class="row">
+                <div class="col-md-2 editor-label">
+                    @Html.LabelFor(model => model.Race12)
+                </div>
+                <div class="col-md-2 editor-field">
+                    @Html.CheckBoxFor(m => m.Race12, new {@class = "switch switch-mini"})
+                </div>
+            </div>
+        }
+        <div id="error" class="row" style="padding-top: 10px; display: none">
+            <div class="col-md-2" style="width: 300px">
+                <div class="alert alert-danger">Plese switch On one ore more.</div>
+            </div>
+        </div>
+        <div class="row" style="padding-top: 10px">
+            <div class="col-md-2 editor-label">
+                <input type="submit" id="SubmitAllTab" value="Save selection" class="btn btn-primary" role="button" />
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,18 @@
+﻿@model RaceData.Models.Models.JockeySearchModel
+@{
+    ViewBag.Title = "Jockey";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryvalajax")
+}
+<div class="col-lg-12">
+    <h2 style="width: 100px; padding-top: 10px; margin: 0px auto">Jockey</h2>
+</div>
+@{ Html.RenderPartial("_Search", Model); }
+
+@if (Model.JockeyModels != null)
+{
+    Html.RenderPartial("_Jockey");
+}
