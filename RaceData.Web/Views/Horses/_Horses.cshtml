@@ -18,7 +18,7 @@
                      }
                      c.Bound(col => col.Id).Hidden();
                      c.Bound(col => col.Name).Title("<b>Name</b>").Sortable(true).Filterable(true).Width(150);
-                     c.Bound(col => col.CountryOfRegistration).Title("<b>Country Of Registration</b>").Sortable(true).Filterable(true).Width(170).ClientTemplate("#=data.CountryOfRegistration?(data.CountryOfRegistration.Name==null?'':data.CountryOfRegistration.Name):''#").EditorTemplateName("DTOCountryEditor");
+                     c.Bound(col => col.CountryOfRegistration).Title("<b>Country Of Registration</b>").Sortable(true).Filterable(true).Width(170).ClientTemplate("#=data.CountryOfRegistration==null?'':(data.CountryOfRegistration.Name==null?'':data.CountryOfRegistration.Name)#").EditorTemplateName("DTOCountryEditor");
                      c.Bound(col => col.CountryOfOrigin).Title("<b>Country Of Origin</b>").Sortable(true).Filterable(true).ClientTemplate("#=data.CountryOfOrigin?(data.CountryOfOrigin.Name==null?'':data.CountryOfOrigin.Name):''#").Width(200).EditorTemplateName("DTOCountryOfOrginEditor");
                      c.Bound(col => col.HK_ChineseName).Title("<b>Chinese Name</b>").Sortable(true).Filterable(true).Width(170);
                      c.Bound(col => col.HK_BrandNumber).Title("<b>Brand Number</b>").Sortable(true).Filterable(true).Width(170);
